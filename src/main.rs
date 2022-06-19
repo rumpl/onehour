@@ -2,8 +2,6 @@ pub mod command;
 pub mod eval;
 pub mod parser;
 
-use std::collections::HashMap;
-
 use command::EngineError;
 use eval::Evaluator;
 use parser::Parser;
@@ -26,6 +24,7 @@ fn main() -> Result<(), EngineError> {
 fn test1() -> Result<(), EngineError> {
     use command::{Command, Value};
     use parser::Program;
+    use std::collections::HashMap;
 
     let program = Program {
         commands: vec![
