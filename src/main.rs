@@ -2,6 +2,8 @@ pub mod command;
 pub mod eval;
 pub mod parser;
 
+use std::collections::HashMap;
+
 use command::EngineError;
 use eval::Evaluator;
 use parser::Parser;
@@ -30,7 +32,7 @@ fn test1() -> Result<(), EngineError> {
             Command::SetVar("a".into(), Value::Int(100)),
             Command::GetVar("a".into()),
         ],
-        functions: Default::default(),
+        functions: HashMap::from([(String::from("main"), 0)]),
         labels: Default::default(),
     };
 
@@ -45,7 +47,7 @@ fn test1() -> Result<(), EngineError> {
 #[test]
 fn test2() -> Result<(), EngineError> {
     use command::Value;
-    let intput = "set x 30\nget x";
+    let intput = "func main\nset x 30\nget x\nend";
     let parser = Parser::new();
     let commands = parser.parse(intput)?;
 
@@ -60,7 +62,7 @@ fn test2() -> Result<(), EngineError> {
 #[test]
 fn test_sub() -> Result<(), EngineError> {
     use command::Value;
-    let intput = "push 5\npush 10\nsub\npop";
+    let intput = "func main\npush 5\npush 10\nsub\npop\nend";
     let parser = Parser::new();
     let commands = parser.parse(intput)?;
 
