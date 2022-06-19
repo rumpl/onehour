@@ -39,7 +39,7 @@ impl Parser {
     }
 
     fn parse_value(&self, input: &str) -> Result<Value, EngineError> {
-        if input.starts_with("\"") && input.ends_with("\"") && input.len() > 1 {
+        if input.starts_with('\"') && input.ends_with('"') && input.len() > 1 {
             self.parse_string(input)
         } else {
             self.parse_int(input)
@@ -95,8 +95,8 @@ impl Parser {
             let command: Vec<_> = line.split_ascii_whitespace().collect();
 
             match command.get(0) {
-                Some(x) if x.contains(":") => {
-                    if let Some(label) = x.strip_suffix(":") {
+                Some(x) if x.contains(':') => {
+                    if let Some(label) = x.strip_suffix(':') {
                         labels.insert(label.into(), output.len());
                     } else {
                         return Err(EngineError::UnknownCommand(x.to_string()));
@@ -146,5 +146,11 @@ impl Parser {
             functions,
             labels,
         })
+    }
+}
+
+impl Default for Parser {
+    fn default() -> Self {
+        Self::new()
     }
 }
