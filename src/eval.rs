@@ -127,7 +127,7 @@ impl Evaluator {
                         update_pc = false;
                     }
                 }
-                Command::FuncEnd => {
+                Command::Ret => {
                     if let Some(pc) = self.pc_stack.pop() {
                         self.pc = pc;
                         update_pc = false;
@@ -135,7 +135,7 @@ impl Evaluator {
                         return Err(EngineError::EmptyStack);
                     }
                 }
-                Command::MainFuncEnd => {
+                Command::End => {
                     break;
                 }
             }

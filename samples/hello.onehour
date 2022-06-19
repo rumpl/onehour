@@ -1,4 +1,4 @@
 func main
 push "hello"
 pop
-endmain
+end

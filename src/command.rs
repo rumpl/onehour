@@ -28,8 +28,8 @@ pub enum Command {
     Mul,
     Div,
     FuncCall(String),
-    FuncEnd,
-    MainFuncEnd,
+    Ret,
+    End,
 }
 
 #[derive(Debug)]

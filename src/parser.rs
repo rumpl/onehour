@@ -119,8 +119,8 @@ impl Parser {
                 Some(x) if *x == "func" => {
                     functions.insert(command[1].into(), output.len());
                 }
-                Some(x) if *x == "end" => output.push(Command::FuncEnd),
-                Some(x) if *x == "endmain" => output.push(Command::MainFuncEnd),
+                Some(x) if *x == "ret" => output.push(Command::Ret),
+                Some(x) if *x == "end" => output.push(Command::End),
                 Some(x) if *x == "call" => output.push(self.parse_func_call(&command)?),
                 Some(name) => return Err(EngineError::UnknownCommand(name.to_string())),
                 None => {}
