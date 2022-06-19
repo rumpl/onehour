@@ -1,0 +1,4 @@
+func main
+set a 100
+get a
+endmain

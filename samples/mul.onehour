@@ -1,0 +1,6 @@
+func main
+push 12
+push 22
+mul
+pop
+endmain

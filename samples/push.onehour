@@ -1,0 +1,4 @@
+func main
+push 101
+pop
+endmain
