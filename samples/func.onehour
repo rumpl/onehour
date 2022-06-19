@@ -1,13 +1,16 @@
 func main
-push 10
-push 10
 call what
-end
-func add
-add
+call print
+push "done"
 pop
-ret
+end
+
 func what
 call add
-call print
+ret
+
+func add
+push 10
+push 10
+add
 ret

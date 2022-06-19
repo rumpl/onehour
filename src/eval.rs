@@ -61,6 +61,21 @@ impl Evaluator {
         }
     }
 
+    fn cmp(&self, lhs: Value, rhs: Value) -> Result<Value, EngineError> {
+        match (lhs, rhs) {
+            (Value::Int(a), Value::Int(b)) => {
+                if a > b {
+                    return Ok(Value::Int(-1));
+                }
+                if a == b {
+                    return Ok(Value::Int(0));
+                }
+                Ok(Value::Int(1))
+            }
+            _ => Err(EngineError::MismatchType),
+        }
+    }
+
     pub fn evaluate(&mut self, program: &Program) -> Result<Value, EngineError> {
         self.pc = program.functions["main"];
         let mut output = Ok(Value::Nothing);
@@ -118,9 +133,8 @@ impl Evaluator {
                 }
                 Command::FuncCall(name) => {
                     if name == "print" {
-                        if let Ok(value) = &output {
-                            println!("{}", value);
-                        }
+                        let value = self.pop()?;
+                        println!("{}", value);
                     } else {
                         self.pc_stack.push(self.pc + 1);
                         self.pc = program.functions[name];
@@ -137,6 +151,52 @@ impl Evaluator {
                 }
                 Command::End => {
                     break;
+                }
+                Command::Cmp => {
+                    let lhs = self.pop()?;
+                    let rhs = self.pop()?;
+
+                    let result = self.cmp(lhs, rhs)?;
+                    self.stack.push(result);
+                }
+                Command::Jn(label) => {
+                    let value = self.pop()?;
+                    match value {
+                        Value::Int(x) => {
+                            if x < 0 {
+                                self.pc = program.labels[label];
+                                update_pc = false;
+                            }
+                        }
+                        Value::Nothing => return Err(EngineError::EmptyStack),
+                        Value::String(_) => return Err(EngineError::EmptyStack),
+                    }
+                }
+                Command::Jp(label) => {
+                    let value = self.pop()?;
+                    match value {
+                        Value::Int(x) => {
+                            if x > 0 {
+                                self.pc = program.labels[label];
+                                update_pc = false;
+                            }
+                        }
+                        Value::Nothing => return Err(EngineError::EmptyStack),
+                        Value::String(_) => return Err(EngineError::EmptyStack),
+                    }
+                }
+                Command::Jz(label) => {
+                    let value = self.pop()?;
+                    match value {
+                        Value::Int(x) => {
+                            if x == 0 {
+                                self.pc = program.labels[label];
+                                update_pc = false;
+                            }
+                        }
+                        Value::Nothing => return Err(EngineError::EmptyStack),
+                        Value::String(_) => return Err(EngineError::EmptyStack),
+                    }
                 }
             }
 

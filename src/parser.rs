@@ -8,6 +8,7 @@ pub struct Parser {}
 pub struct Program {
     pub commands: Vec<Command>,
     pub functions: HashMap<String, usize>,
+    pub labels: HashMap<String, usize>,
 }
 
 impl Parser {
@@ -88,10 +89,19 @@ impl Parser {
         let mut output = vec![];
         let mut functions: HashMap<String, usize> = HashMap::new();
 
+        let mut labels: HashMap<String, usize> = HashMap::new();
+
         for line in input.lines() {
             let command: Vec<_> = line.split_ascii_whitespace().collect();
 
             match command.get(0) {
+                Some(x) if x.contains(":") => {
+                    if let Some(label) = x.strip_suffix(":") {
+                        labels.insert(label.into(), output.len());
+                    } else {
+                        return Err(EngineError::UnknownCommand(x.to_string()));
+                    }
+                }
                 Some(x) if *x == "set" => {
                     output.push(self.parse_set(&command)?);
                 }
@@ -122,6 +132,10 @@ impl Parser {
                 Some(x) if *x == "ret" => output.push(Command::Ret),
                 Some(x) if *x == "end" => output.push(Command::End),
                 Some(x) if *x == "call" => output.push(self.parse_func_call(&command)?),
+                Some(x) if *x == "cmp" => output.push(Command::Cmp),
+                Some(x) if *x == "jz" => output.push(Command::Jz(command[1].into())),
+                Some(x) if *x == "jp" => output.push(Command::Jp(command[1].into())),
+                Some(x) if *x == "jn" => output.push(Command::Jn(command[1].into())),
                 Some(name) => return Err(EngineError::UnknownCommand(name.to_string())),
                 None => {}
             }
@@ -130,6 +144,7 @@ impl Parser {
         Ok(Program {
             commands: output,
             functions,
+            labels,
         })
     }
 }

@@ -30,6 +30,10 @@ pub enum Command {
     FuncCall(String),
     Ret,
     End,
+    Cmp,
+    Jn(String),
+    Jp(String),
+    Jz(String),
 }
 
 #[derive(Debug)]

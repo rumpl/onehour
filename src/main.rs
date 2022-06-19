@@ -14,7 +14,7 @@ fn main() -> Result<(), EngineError> {
         let mut eval = Evaluator::new();
         let result = eval.evaluate(&commands)?;
 
-        println!("{}", result);
+        println!("Result -> {}", result);
     }
 
     Ok(())
@@ -31,6 +31,7 @@ fn test1() -> Result<(), EngineError> {
             Command::GetVar("a".into()),
         ],
         functions: Default::default(),
+        labels: Default::default(),
     };
 
     let mut evaluator = Evaluator::new();

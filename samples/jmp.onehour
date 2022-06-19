@@ -1,0 +1,9 @@
+func main
+push 0
+jz hello
+push "this_will_not_print"
+call print
+hello:
+push "hello"
+call print
+end
