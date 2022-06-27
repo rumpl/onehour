@@ -1,12 +1,19 @@
 pub mod command;
 pub mod eval;
+pub mod oh;
 pub mod parser;
 
 use command::EngineError;
 use eval::Evaluator;
+use oh::parser::Parser as OhParser;
 use parser::Parser;
 
 fn main() -> Result<(), EngineError> {
+    let mut oh_parser = OhParser::new();
+    let contents = std::fs::read_to_string("./samples/oh/tokens.oh").unwrap();
+    let result = oh_parser.parse(&contents)?;
+    println!("{:?}", result);
+
     for file in std::env::args().skip(1) {
         let contents = std::fs::read_to_string(file).unwrap();
         let parser = Parser::new();

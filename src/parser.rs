@@ -4,7 +4,7 @@ use crate::command::{Command, EngineError, Value};
 
 pub struct Parser {}
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct Program {
     pub commands: Vec<Command>,
     pub functions: HashMap<String, usize>,
